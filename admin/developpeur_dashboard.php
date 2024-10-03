@@ -22,7 +22,7 @@ if ($_SESSION['role'] !== 'developpeur') {
         
         <div class="flex justify-center space-x-4">
             <a href="consulter_planning.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Consulter le Planning</a>
-            <a href="envoyer_message.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Envoyer un Message</a>
+            <a href="messaging.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Envoyer un Message</a>
             <a href="marquer_avancement.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Marquer l'Avancement</a>
         </div>
     </div>

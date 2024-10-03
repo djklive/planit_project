@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tbody>
                 <?php foreach ($fonctionnalites as $fonctionnalite): ?>
                     <tr>
-                        <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></td>
+                        <td class="py-2 px-4 border"><a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></a></td>
                         <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['description']); ?></td>
                         <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['priorite']); ?></td>
                         <td class="py-2 px-4 border">
