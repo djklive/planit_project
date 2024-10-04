@@ -8,7 +8,7 @@ include '../includes/db.php'; // Chemin correct vers le fichier de base de donn�
 //     exit();
 // }
 
-// Récupérer tous les sprints
+// Récupérer tous les taches
 $stmt_sprints = $pdo->query("SELECT * FROM taches");
 $sprints = $stmt_sprints->fetchAll(PDO::FETCH_ASSOC);
 
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statut = $_POST['statut'];
     $date_debut = $_POST['date_debut'];
     $date_fin = $_POST['date_fin'];
-
+    
     $stmt = $pdo->prepare("INSERT INTO sprint_backlog (product_backlog_id, sprint_id, statut, date_debut, date_fin) VALUES (?, ?, ?, ?, ?)");
     $stmt->execute([$product_backlog_id, $sprint_id, $statut, $date_debut, $date_fin]);
 
