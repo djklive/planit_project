@@ -31,22 +31,22 @@ $taches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Initialiser la variable d'erreur
 $error_message = '';
 
-// Ajouter une tache
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $tache = trim($_POST['tache']);
+// Handle form submission for status update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Statut']) && isset($_POST['tache_id'])) {
+    $statut = trim($_POST['Statut']);
+    $tache_id = $_POST['tache_id'];
     
-
-    // Validation des champs
-    if (empty($tache)) {
-        $error_message = 'Veuillez remplir tous les champs.';
-    } else {
-        // Préparer la requête pour ajouter une fonctionnalité
-        $stmt = $pdo->prepare("INSERT INTO taches (id_fonctionnalite, nom_tache) VALUES (?, ?)");
-        $stmt->execute([$_GET['id'], $tache]);
-        header('Location: product_backlog_fonctionnalite.php'); // Redirection pour éviter la soumission multiple
-        exit();
-    }
+    $update_avancement = $pdo->prepare("UPDATE taches SET statut = ? WHERE id = ?");
+    $update_avancement->execute([$statut, $tache_id]);
+    
+    // Redirect to prevent form resubmission
+    header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id']);
+    exit();
 }
+
+
+
+
 
 
 ?>
@@ -62,43 +62,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body class="bg-gray-100">
 
     <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">Gestion du Sprint Backlog</h1>
-        <?php if ($error_message): ?>
-            <div class="bg-red-200 text-red-800 p-2 rounded mb-4">
-                <?php echo htmlspecialchars($error_message); ?>
-            </div>
-        <?php endif; ?>
+        
+        
         <?php
+        
             if ($_SESSION['role']=='product_owner') {
                 
             
         ?>
+        <h1 class="text-3xl font-bold mb-6">Product Owner</h1>
+            <?php if ($error_message): ?>
+                <div class="bg-red-200 text-red-800 p-2 rounded mb-4">
+                    <?php echo htmlspecialchars($error_message); ?>
+                </div>
+            <?php endif; ?>
             <form action="" method="POST" class="mb-4">
                 <div class="mb-4">
-                    <label for="tache" class="block text-sm font-bold mb-2">Tache :</label>
-                    <input type="text" id="tache" name="tache" class="border rounded w-full p-2"  required>
+                    <label for="tache" class="block text-sm font-bold mb-2">Sprint Backlog:</label>
+                    <input type="text" id="tache" name="taches" class="border rounded w-full p-2"  required>
                 </div>
                 
                 <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-800 w-full">Ajouter</button>
             </form>
         <?php
+            }else {
+        ?>
+            <h1 class="text-3xl font-bold mb-6">Membre Equipe Developpement</h1>
+               
+        <?php
             }
         ?>
 
-        <h2 class="text-2xl font-bold mb-4">Taches Existantes</h2>
+        <h2 class="text-2xl font-bold mb-4">Sprint Backlog</h2>
         <table class="min-w-full bg-white border rounded">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="py-2 px-4 border" colspan="2"><?php echo htmlspecialchars($projet['fonctionnalite']); ?></th>
+                    <th class="py-2 px-4 border" ><?php echo htmlspecialchars($projet['fonctionnalite']); ?></th>
+                    <th class="py-2 px-4 border" >Actions</th>
+                    <th class="py-2 px-4 border" >Avancement</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($taches as $tache): ?>
+                <?php
+
+                
+                
+                foreach ($taches as $tache): ?>
                     <tr>
                         <td class="py-2 px-4 border"><a href="#"><?php echo htmlspecialchars($tache['nom_tache']); ?></a></td>
                         <td class="py-2 px-4 border">
 
                         <?php
+                            
                             if ($_SESSION['role']=='product_owner') {
                                 
                             
@@ -113,6 +128,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php
                             }
                         ?>
+                        </td>
+                        <td class="py-2 px-4 border "><a href="#">
+                            <?php
+                                if ($_SESSION['role']=='product_owner') {
+                                    
+                                
+                            ?>
+                               <p><?php echo htmlspecialchars($tache['statut'] ?? 'Non défini'); ?></p>
+                            <?php
+                                }else {
+                                
+                            ?>
+
+                                <form action="" method='POST' class='flex items-center justify-between'>
+                                    <select id="statut_<?php echo $tache['id']; ?>" name="Statut" class="border rounded w-2/4 p-2" required>
+                                        <option value="à faire" <?php echo $tache['statut'] == 'à faire' ? 'selected' : ''; ?>>À faire</option>
+                                        <option value="en cours" <?php echo $tache['statut'] == 'en cours' ? 'selected' : ''; ?>>En cours</option>
+                                        <option value="terminé" <?php echo $tache['statut'] == 'terminé' ? 'selected' : ''; ?>>Terminé</option>
+                                    </select>
+                                    <input type="hidden" name="tache_id" value="<?php echo $tache['id']; ?>">
+                                    <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Mettre à jour</button>
+                                    <p><?php echo htmlspecialchars($tache['statut'] ?? 'Non défini'); ?></p>
+                                </form>
+                                
+                            <?php
+                                }
+                            ?>
+                            
+                           
+                           
                         </td>
                     </tr>
                 <?php endforeach; ?>

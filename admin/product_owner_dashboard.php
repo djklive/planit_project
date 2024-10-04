@@ -30,7 +30,7 @@ $projets_Admin = $stmt_projets->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-gray-100">
     <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">Tableau de bord Product Owner</h1>
+        <h1 class="text-3xl font-bold mb-6">Product Owner</h1>
 
         <!-- Lien vers la création du Product Backlog -->
         <a href="product_backlog.php" class="mb-4 inline-block bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Créer un Product Backlog</a>

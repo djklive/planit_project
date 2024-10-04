@@ -41,11 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="bg-gray-100">
     <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">Gestion du Product Backlog</h1>
+        <h1 class="text-3xl font-bold mb-6">Product Owner</h1>
 
         <form action="" method="POST" class="mb-4">
             <div class="mb-4">
-                <label for="fonctionnalite" class="block text-sm font-bold mb-2">Fonctionnalité :</label>
+                <label for="fonctionnalite" class="block text-sm font-bold mb-2">Product Backlog :</label>
                 <input type="text" id="fonctionnalite" name="fonctionnalite" class="border rounded w-full p-2" required>
             </div>
             <div class="mb-4">
@@ -63,11 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full">Ajouter</button>
         </form>
 
-        <h2 class="text-2xl font-bold mb-4">Fonctionnalités Existantes</h2>
+        <h2 class="text-2xl font-bold mb-4">Backlog</h2>
         <table class="min-w-full bg-white border rounded">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="py-2 px-4 border">Fonctionnalité</th>
+                    <th class="py-2 px-4 border">Product Backlog</th>
                     <th class="py-2 px-4 border">Description</th>
                     <th class="py-2 px-4 border">Priorité</th>
                     <th class="py-2 px-4 border">Actions</th>
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tbody>
                 <?php foreach ($fonctionnalites as $fonctionnalite): ?>
                     <tr>
-                        <td class="py-2 px-4 border"><a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></a></td>
+                        <td class="py-2 px-4 border "><a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class='text-blue-400 font-bold hover:text-blue-600'><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></a></td>
                         <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['description']); ?></td>
                         <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['priorite']); ?></td>
                         <td class="py-2 px-4 border">
