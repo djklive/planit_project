@@ -27,10 +27,10 @@ $fonctionnalites = $stmt_fonctionnalite->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-gray-100">
     <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Tableau de bord Développeur</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Membre Équipe Développement</h1>
         
         <div class="flex justify-center space-x-4">
-            <!-- <a href="developpeur_dashboard.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Differentes listes</a> -->
+            <a href="developpeur_dashboard.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Daily Sprint</a>
 
             <a href="consulter_planning.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Consulter le Planning</a>
             <a href="messaging.php" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Envoyer un Message</a>
@@ -72,12 +72,12 @@ $fonctionnalites = $stmt_fonctionnalite->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <!-- liste des fonctionnalites -->
-        <h2 class="text-2xl font-bold mb-4">Fonctionnalités Existantes</h2>
+        <!-- liste des fonctionnalités -->
+        <h2 class="text-2xl font-bold mb-4">Backlog</h2>
         <table class="min-w-full bg-white border rounded">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="py-2 px-4 border">Fonctionnalité</th>
+                    <th class="py-2 px-4 border">Product Backlog</th>
                     <th class="py-2 px-4 border">Description</th>
                     <th class="py-2 px-4 border">Priorité</th>
                     <th class="py-2 px-4 border">Actions</th>
@@ -86,7 +86,7 @@ $fonctionnalites = $stmt_fonctionnalite->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
                 <?php foreach ($fonctionnalites as $fonctionnalite): ?>
                     <tr>
-                        <td class="py-2 px-4 border"><a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></a></td>
+                        <td class="py-2 px-4 border"><a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-blue-400 font-bold hover:text-blue-600"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></a></td>
                         <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['description']); ?></td>
                         <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['priorite']); ?></td>
                         <td class="py-2 px-4 border">

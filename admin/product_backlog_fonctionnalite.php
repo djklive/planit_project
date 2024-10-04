@@ -23,9 +23,14 @@ if (!$projet) {
     exit();
 }
 
-// Récupérer les taches existantes
-$stmt = $pdo->prepare("SELECT * FROM taches WHERE id_fonctionnalite=?");
-$stmt->execute(array($_GET['id']));
+// Récupérer les taches existantes avec les noms des développeurs
+$stmt = $pdo->prepare("
+    SELECT t.*, u.nom as nom_developpeur 
+    FROM taches t 
+    LEFT JOIN utilisateurs u ON t.id_developpeur = u.id 
+    WHERE t.id_fonctionnalite = ?
+");
+$stmt->execute([$_GET['id']]);
 $taches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Initialiser la variable d'erreur
@@ -62,34 +67,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body class="bg-gray-100">
 
     <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">Gestion du Product Backlog</h1>
-        <?php if ($error_message): ?>
-            <div class="bg-red-200 text-red-800 p-2 rounded mb-4">
-                <?php echo htmlspecialchars($error_message); ?>
-            </div>
-        <?php endif; ?>
+        
+        
         <?php
             if ($_SESSION['role']=='product_owner') {
                 
             
         ?>
+            <h1 class="text-3xl font-bold mb-6">Product Owner</h1>
+            <?php if ($error_message): ?>
+                <div class="bg-red-200 text-red-800 p-2 rounded mb-4">
+                    <?php echo htmlspecialchars($error_message); ?>
+                </div>
+            <?php endif; ?>
             <form action="" method="POST" class="mb-4">
                 <div class="mb-4">
-                    <label for="tache" class="block text-sm font-bold mb-2">Tache :</label>
+                    <label for="tache" class="block text-sm font-bold mb-2">Sprint Backlog :</label>
                     <input type="text" id="tache" name="tache" class="border rounded w-full p-2"  required>
                 </div>
                 
                 <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-800 w-full">Ajouter</button>
             </form>
         <?php
+            } else {
+        ?>
+                <h1 class="text-3xl font-bold mb-6">Membre Équipe Développement</h1>
+        <?php
             }
         ?>
 
-        <h2 class="text-2xl font-bold mb-4">Taches Existantes</h2>
+        <h2 class="text-2xl font-bold mb-4">Sprint Backlog</h2>
         <table class="min-w-full bg-white border rounded">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="py-2 px-4 border" colspan="2"><?php echo htmlspecialchars($projet['fonctionnalite']); ?></th>
+                    <th class="py-2 px-4 border"><?php echo htmlspecialchars($projet['fonctionnalite']); ?></th>
+                    <th class="py-2 px-4 border">Actions</th>
+                    <th class="py-2 px-4 border">développeur</th>
+                    <th class="py-2 px-4 border">Avancement</th>
                 </tr>
             </thead>
             <tbody>
@@ -113,6 +127,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php
                             }
                         ?>
+                        </td>
+                        <td class="py-2 px-4 border">
+                            <?php echo $tache['nom_developpeur'] ? htmlspecialchars($tache['nom_developpeur']) : 'Non assigné'; ?>
+                        </td>
+                        <td class="py-2 px-4 border">
+
+                            <?php
+                                if ($_SESSION['role']=='product_owner') {
+                                    
+                                
+                            ?>
+                                <p>Aucune</p>
+
+                            <?php
+                                }else {
+                                
+                            ?>
+                                <form action="" method="POST" class="flex justify-between items-center">
+                                    <select id="statut" name="statut" class="border rounded w-2/4 p-2" required>
+                                        <option value="à faire">À faire</option>
+                                        <option value="en cours">En cours</option>
+                                        <option value="terminé">Terminé</option>
+                                    </select>
+                                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200" >Mettre a jour</button>
+                                    <p>En cours</p>
+                                </form> 
+                            <?php
+                                }
+                            ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

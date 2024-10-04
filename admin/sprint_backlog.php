@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </select>
             </div>
             <div class="mb-4">
-                <label for="sprint_id" class="block text-sm font-bold mb-2">Sprint :</label>
+                <label for="sprint_id" class="block text-sm font-bold mb-2">Tâches :</label>
                 <select id="sprint_id" name="sprint_id" class="border rounded w-full p-2" required>
                     <option value="">Sélectionnez un sprint</option>
                     <?php foreach ($sprints as $sprint): ?>
@@ -63,14 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="mb-4">
+            <!-- <div class="mb-4">
                 <label for="statut" class="block text-sm font-bold mb-2">Statut :</label>
                 <select id="statut" name="statut" class="border rounded w-full p-2" required>
                     <option value="à faire">À faire</option>
                     <option value="en cours">En cours</option>
                     <option value="terminé">Terminé</option>
                 </select>
-            </div>
+            </div> -->
             <div class="mb-4">
                 <label for="date_debut" class="block text-sm font-bold mb-2">Date de début :</label>
                 <input type="date" id="date_debut" name="date_debut" class="border rounded w-full p-2" required>
