@@ -24,7 +24,8 @@ if (!$projet) {
 }
 
 // Récupérer les taches existantes
-$stmt = $pdo->query("SELECT * FROM taches");
+$stmt = $pdo->prepare("SELECT * FROM taches WHERE id_fonctionnalite = ?");
+$stmt->execute([$_GET['id']]);
 $taches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Initialiser la variable d'erreur
@@ -40,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = 'Veuillez remplir tous les champs.';
     } else {
         // Préparer la requête pour ajouter une fonctionnalité
-        $stmt = $pdo->prepare("INSERT INTO taches (nom_tache) VALUES (?)");
-        $stmt->execute([$tache]);
+        $stmt = $pdo->prepare("INSERT INTO taches (id_fonctionnalite, nom_tache) VALUES (?, ?)");
+        $stmt->execute([$_GET['id'], $tache]);
         header('Location: product_backlog_fonctionnalite.php'); // Redirection pour éviter la soumission multiple
         exit();
     }
@@ -61,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body class="bg-gray-100">
 
     <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">Gestion du Product Backlog</h1>
+        <h1 class="text-3xl font-bold mb-6">Gestion du Sprint Backlog</h1>
         <?php if ($error_message): ?>
             <div class="bg-red-200 text-red-800 p-2 rounded mb-4">
                 <?php echo htmlspecialchars($error_message); ?>
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" id="tache" name="tache" class="border rounded w-full p-2"  required>
             </div>
             
-            <button type="submit" class="bg-red-500 text-white p-2 rounded hover:bg-blue-600 w-full">Ajouter</button>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full">Ajouter</button>
         </form>
 
         <h2 class="text-2xl font-bold mb-4">Taches Existantes</h2>
@@ -87,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php foreach ($taches as $tache): ?>
                     <tr>
                         <td class="py-2 px-4 border"><a href="#"><?php echo htmlspecialchars($tache['nom_tache']); ?></a></td>
-                        <td class="py-2 px-4 border">
+                        <td class="py-2 px-4 border flex justify-end gap-4">
                             <a href="modifier_tache.php?id=<?php echo $tache['id']; ?>" class="text-blue-500">Modifier</a>
                             <a href="supprimer_tache.php?id=<?php echo $tache['id']; ?>" class="text-red-500">Supprimer</a>
                         </td>

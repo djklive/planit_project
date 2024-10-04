@@ -9,7 +9,7 @@ include '../includes/db.php'; // Chemin correct vers le fichier de base de donn�
 // }
 
 // Récupérer tous les sprints
-$stmt_sprints = $pdo->query("SELECT * FROM sprints");
+$stmt_sprints = $pdo->query("SELECT * FROM taches");
 $sprints = $stmt_sprints->fetchAll(PDO::FETCH_ASSOC);
 
 // Récupérer tous les éléments du product backlog
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="bg-gray-100">
     <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">Gestion du Sprint Backlog</h1>
+        <h1 class="text-3xl font-bold mb-6"> Sprint </h1>
 
         <form action="" method="POST" class="mb-6">
             <div class="mb-4">
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <select id="sprint_id" name="sprint_id" class="border rounded w-full p-2" required>
                     <option value="">Sélectionnez un sprint</option>
                     <?php foreach ($sprints as $sprint): ?>
-                        <option value="<?php echo $sprint['id']; ?>"><?php echo htmlspecialchars($sprint['nom_sprint']); ?></option>
+                        <option value="<?php echo $sprint['id']; ?>"><?php echo htmlspecialchars($sprint['nom_tache']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full">Ajouter au Sprint Backlog</button>
         </form>
 
-        <h2 class="text-2xl font-bold mb-4">Éléments du Sprint Backlog</h2>
+        <h2 class="text-2xl font-bold mb-4">Éléments du Sprint </h2>
         <table class="min-w-full bg-white border rounded">
             <thead>
                 <tr class="bg-gray-200">
