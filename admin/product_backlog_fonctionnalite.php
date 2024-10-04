@@ -24,7 +24,8 @@ if (!$projet) {
 }
 
 // Récupérer les taches existantes
-$stmt = $pdo->query("SELECT * FROM taches");
+$stmt = $pdo->prepare("SELECT * FROM taches WHERE id_fonctionnalite=?");
+$stmt->execute(array($_GET['id']));
 $taches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Initialiser la variable d'erreur
@@ -40,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = 'Veuillez remplir tous les champs.';
     } else {
         // Préparer la requête pour ajouter une fonctionnalité
-        $stmt = $pdo->prepare("INSERT INTO taches (nom_tache) VALUES (?)");
-        $stmt->execute([$tache]);
+        $stmt = $pdo->prepare("INSERT INTO taches (nom_tache,id_fonctionnalite) VALUES (?,?)");
+        $stmt->execute([$tache,$_GET['id']]);
         header('Location: product_backlog_fonctionnalite.php'); // Redirection pour éviter la soumission multiple
         exit();
     }
@@ -67,14 +68,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php echo htmlspecialchars($error_message); ?>
             </div>
         <?php endif; ?>
-        <form action="" method="POST" class="mb-4">
-            <div class="mb-4">
-                <label for="tache" class="block text-sm font-bold mb-2">Tache :</label>
-                <input type="text" id="tache" name="tache" class="border rounded w-full p-2"  required>
-            </div>
+        <?php
+            if ($_SESSION['role']=='product_owner') {
+                
             
-            <button type="submit" class="bg-red-500 text-white p-2 rounded hover:bg-blue-600 w-full">Ajouter</button>
-        </form>
+        ?>
+            <form action="" method="POST" class="mb-4">
+                <div class="mb-4">
+                    <label for="tache" class="block text-sm font-bold mb-2">Tache :</label>
+                    <input type="text" id="tache" name="tache" class="border rounded w-full p-2"  required>
+                </div>
+                
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-800 w-full">Ajouter</button>
+            </form>
+        <?php
+            }
+        ?>
 
         <h2 class="text-2xl font-bold mb-4">Taches Existantes</h2>
         <table class="min-w-full bg-white border rounded">
@@ -88,8 +97,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tr>
                         <td class="py-2 px-4 border"><a href="#"><?php echo htmlspecialchars($tache['nom_tache']); ?></a></td>
                         <td class="py-2 px-4 border">
+
+                        <?php
+                            if ($_SESSION['role']=='product_owner') {
+                                
+                            
+                        ?>
                             <a href="modifier_tache.php?id=<?php echo $tache['id']; ?>" class="text-blue-500">Modifier</a>
                             <a href="supprimer_tache.php?id=<?php echo $tache['id']; ?>" class="text-red-500">Supprimer</a>
+                        <?php
+                            }else {
+                               
+                        ?>
+                                <p class='text-red-600'>Aucune</p>
+                        <?php
+                            }
+                        ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

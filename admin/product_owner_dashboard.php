@@ -71,4 +71,7 @@ $projets_Admin = $stmt_projets->fetchAll(PDO::FETCH_ASSOC);
             </tbody>
         </table>
 
+    </div>
+</body>
+
            
