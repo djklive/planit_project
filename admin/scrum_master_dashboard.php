@@ -55,32 +55,54 @@ if ($_SESSION['role'] == 'developpeur') {
             <a href="affecter_taches.php" class="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-green-600 transition duration-200">Affecter des Tâches</a>
         </div>
         
-        <div class="mt-10 hidden" id="btn">
-            <!-- Ajouter d'autres sections de votre tableau de bord ici -->
-            <h2 class="text-2xl font-bold mb-4">Backlog</h2>
-            <table class="min-w-full bg-white border rounded">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border">Product Backlog</th>
-                        <th class="py-2 px-4 border">Description</th>
-                        <th class="py-2 px-4 border">Priorité</th>
-                        <th class="py-2 px-4 border">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($fonctionnalites as $fonctionnalite): ?>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+            <h2 class="text-xl font-semibold p-4 bg-gray-50 border-b">Backlog</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <td class="py-2 px-4 border"><a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-blue-400 font-bold hover:text-blue-600"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></a></td>
-                            <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['description']); ?></td>
-                            <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['priorite']); ?></td>
-                            <td class="py-2 px-4 border">
-                                <a href="modifier_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-blue-500">Modifier</a>
-                                <a href="supprimer_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-red-500">Supprimer</a>
-                            </td>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Backlog</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <?php foreach ($fonctionnalites as $fonctionnalite): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-blue-600 hover:text-blue-900 font-medium">
+                                        <?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?>
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?php echo htmlspecialchars($fonctionnalite['description']); ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        <?php 
+                                        if ($fonctionnalite['priorite'] == 'haute') {
+                                            echo 'bg-red-100 text-red-800';
+                                        } elseif ($fonctionnalite['priorite'] == 'moyenne') {
+                                            echo 'bg-yellow-100 text-yellow-800';
+                                        } elseif ($fonctionnalite['priorite'] == 'basse') {
+                                            echo 'bg-green-100 text-green-800';
+                                        } else {
+                                            echo 'bg-gray-100 text-gray-800';
+                                        }
+                                        ?>">
+                                        <?php echo htmlspecialchars($fonctionnalite['priorite']); ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="modifier_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-indigo-600 hover:text-indigo-900 mr-3">Modifier</a>
+                                    <a href="supprimer_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-red-600 hover:text-red-900">Supprimer</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

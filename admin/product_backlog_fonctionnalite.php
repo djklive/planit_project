@@ -45,10 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($tache)) {
         $error_message = 'Veuillez remplir tous les champs.';
     } else {
-        // Préparer la requête pour ajouter une fonctionnalité
+        // Préparer la requête pour ajouter une tache
         $stmt = $pdo->prepare("INSERT INTO taches (id_fonctionnalite, nom_tache) VALUES (?, ?)");
         $stmt->execute([$_GET['id'], $tache]);
-        header('Location: product_backlog_fonctionnalite.php'); // Redirection pour éviter la soumission multiple
+        if ($_SESSION['role'] == 'product_owner') {
+            header('Location: product_backlog_fonctionnalite.php'); // Rediriger vers le tableau de bord après modification
+        } else if ($_SESSION['role'] == 'scrum_master'){
+            header('Location: scrum_master_dashboard.php'); // Rediriger vers le tableau de bord après modification
+        } // Redirection pour éviter la soumission multiple
         exit();
     }
 }
