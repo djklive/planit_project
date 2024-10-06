@@ -5,7 +5,11 @@
         $id_value=$_GET['id'];
         $supprimer_utilisateur=$pdo->prepare('DELETE FROM taches WHERE id=?');
         $supprimer_utilisateur->execute(array($id_value));
-        header('Location:product_backlog_fonctionnalite.php');
+        if ($_SESSION['role'] == 'product_owner') {
+            header('Location: product_backlog_fonctionnalite.php'); // Rediriger vers le tableau de bord après modification
+        } else if ($_SESSION['role'] == 'scrum_master'){
+            header('Location: scrum_master_dashboard.php'); // Rediriger vers le tableau de bord après modification
+        }
         
     }
 

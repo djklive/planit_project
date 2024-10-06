@@ -2,12 +2,6 @@
 session_start();
 include '../includes/db.php'; // Chemin correct vers le fichier de base de données
 
-// // Vérification de la connexion et du rôle de l'utilisateur
-// if (!isset($_SESSION['utilisateur_id']) || $_SESSION['role'] !== 'admin') {
-//     header('Location: login.php');
-//     exit();
-// }
-
 // Récupérer les fonctionnalités existantes
 $stmt = $pdo->query("SELECT * FROM product_backlog");
 $fonctionnalites = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -25,10 +19,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Préparer la requête pour ajouter une fonctionnalité
         $stmt = $pdo->prepare("INSERT INTO product_backlog (fonctionnalite, description, priorite) VALUES (?, ?, ?)");
         $stmt->execute([$fonctionnalite, $description, $priorite]);
-        header('Location: product_backlog.php'); // Redirection pour éviter la soumission multiple
+        header('Location: product_backlog.php');
         exit();
     }
 }
+
+if ($_SESSION['role'] == 'developpeur') {
+    $lien = "developpeur_dashboard.php";
+ }
+ elseif ($_SESSION['role'] == 'scrum_master') {
+    $lien = "scrum_master_dashboard.php";
+ }
+ elseif ($_SESSION['role'] == 'product_owner') {
+    $lien = "product_owner_dashboard.php";
+ }
 ?>
 
 <!DOCTYPE html>
@@ -38,55 +42,114 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion du Product Backlog</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">Product Owner</h1>
+<body class="bg-gray-100 min-h-screen">
 
-        <form action="" method="POST" class="mb-4">
-            <div class="mb-4">
-                <label for="fonctionnalite" class="block text-sm font-bold mb-2">Product Backlog :</label>
-                <input type="text" id="fonctionnalite" name="fonctionnalite" class="border rounded w-full p-2" required>
+    <nav class="bg-gray-800 p-4">
+        
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="../images/logo.png" alt="logo" class="w-10 h-10">
+                    <h1 class="text-white text-lg font-semibold">Product Owner</h1>
+                    <a href="<?php echo $lien; ?>" class="text-white text-lg font-semibold">Accueil</a>
+                </div>
+                <div class="space-x-4">
+                    <a href="logout.php" class="text-white">Déconnexion</a>
+                </div>
             </div>
-            <div class="mb-4">
-                <label for="description" class="block text-sm font-bold mb-2">Description :</label>
-                <textarea id="description" name="description" class="border rounded w-full p-2" required></textarea>
-            </div>
-            <div class="mb-4">
-                <label for="priorite" class="block text-sm font-bold mb-2">Priorité :</label>
-                <select id="priorite" name="priorite" class="border rounded w-full p-2" required>
-                    <option value="haute">Haute</option>
-                    <option value="moyenne">Moyenne</option>
-                    <option value="basse">Basse</option>
-                </select>
-            </div>
-            <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full">Ajouter</button>
-        </form>
+        </div>
+        
+    </nav>
 
-        <h2 class="text-2xl font-bold mb-4">Backlog</h2>
-        <table class="min-w-full bg-white border rounded">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="py-2 px-4 border">Product Backlog</th>
-                    <th class="py-2 px-4 border">Description</th>
-                    <th class="py-2 px-4 border">Priorité</th>
-                    <th class="py-2 px-4 border">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($fonctionnalites as $fonctionnalite): ?>
-                    <tr>
-                        <td class="py-2 px-4 border"><a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-blue-400 font-bold hover:text-blue-600"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></a></td>
-                        <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['description']); ?></td>
-                        <td class="py-2 px-4 border"><?php echo htmlspecialchars($fonctionnalite['priorite']); ?></td>
-                        <td class="py-2 px-4 border">
-                            <a href="modifier_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-blue-500">Modifier</a>
-                            <a href="supprimer_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-red-500">Supprimer</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+    <div class="max-w-7xl mx-auto p-6 sm:p-8">
+        <h1 class="text-4xl font-bold mb-8 text-gray-800">Gestion du Product Backlog</h1>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-6 text-blue-600">Ajouter une fonctionnalité</h2>
+            <?php if (isset($error_message)): ?>
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+                    <p><?php echo htmlspecialchars($error_message); ?></p>
+                </div>
+            <?php endif; ?>
+            <form action="" method="POST" class="space-y-4">
+                <div>
+                    <label for="fonctionnalite" class="block text-sm font-medium text-gray-700 mb-2">Product Backlog :</label>
+                    <input type="text" id="fonctionnalite" name="fonctionnalite" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description :</label>
+                    <textarea id="description" name="description" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" required></textarea>
+                </div>
+                <div>
+                    <label for="priorite" class="block text-sm font-medium text-gray-700 mb-2">Priorité :</label>
+                    <select id="priorite" name="priorite" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" required>
+                        <option value="haute">Haute</option>
+                        <option value="moyenne">Moyenne</option>
+                        <option value="basse">Basse</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Ajouter
+                </button>
+            </form>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <h2 class="text-xl font-semibold p-4 bg-gray-50 border-b">Backlog</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Backlog</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <?php foreach ($fonctionnalites as $fonctionnalite): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <a href="product_backlog_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-blue-600 hover:text-blue-900 font-medium">
+                                        <?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?>
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?php echo htmlspecialchars($fonctionnalite['description']); ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        <?php 
+                                        if ($fonctionnalite['priorite'] == 'haute') {
+                                            echo 'bg-red-100 text-red-800';
+                                        } elseif ($fonctionnalite['priorite'] == 'moyenne') {
+                                            echo 'bg-yellow-100 text-yellow-800';
+                                        } elseif ($fonctionnalite['priorite'] == 'basse') {
+                                            echo 'bg-green-100 text-green-800';
+                                        } else {
+                                            echo 'bg-gray-100 text-gray-800';
+                                        }
+                                        ?>">
+                                        <?php echo htmlspecialchars($fonctionnalite['priorite']); ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="modifier_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-indigo-600 hover:text-indigo-900 mr-3">Modifier</a>
+                                    <a href="supprimer_fonctionnalite.php?id=<?php echo $fonctionnalite['id']; ?>" class="text-red-600 hover:text-red-900">Supprimer</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -37,56 +37,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Affecter Taches</title>
+    <title>Affecter Tâches</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen">
 
-    <div class="max-w-7xl mx-auto p-8">
+    <div class="max-w-7xl mx-auto p-6 sm:p-8">
 
-        <h2 class="text-3xl font-bold mb-4">Sprint Backlog</h2>
-        <?php foreach ($fonctionnalites as $fonctionnalite): ?>
-            <?php
-            // Récupérer les taches par fonctionnalités 
-            $stmt = $pdo->prepare("SELECT t.*, u.nom as nom_developpeur FROM taches t LEFT JOIN utilisateurs u ON t.id_developpeur = u.id WHERE t.id_fonctionnalite = ?");
-            $stmt->execute([$fonctionnalite['id']]);
-            $taches = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            ?>
-            <h2 class="text-2xl font-bold mb-4"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?></h2>
-            <table class="min-w-full bg-white border rounded mb-6">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border">Taches</th>
-                        <th class="py-2 px-4 border">Action</th>
-                        <th class="py-2 px-4 border">Développeur</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($taches as $tache): ?>
-                        <tr>
-                            <td class="py-2 px-4 border"><?php echo htmlspecialchars($tache['nom_tache']); ?></td>
-                            <td class="py-2 px-4 border">Aucune</td>
-                            <td class="py-2 px-4 border">
-                                <form action="" method="POST" class="flex justify-between items-center">
-                                    <input type="hidden" name="tache_id" value="<?php echo $tache['id']; ?>">
-                                    <select name="utilisateur_id" class="border rounded w-2/4 p-2" onchange="this.form.submit()">
-                                        <option value="">Sélectionnez un développeur</option>
-                                        <?php foreach ($utilisateurs as $utilisateur): ?>
-                                            <option value="<?php echo $utilisateur['id']; ?>" <?php echo ($tache['id_developpeur'] == $utilisateur['id']) ? 'selected' : ''; ?>>
-                                                <?php echo htmlspecialchars($utilisateur['nom']); ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <p><?php echo $tache['nom_developpeur'] ? htmlspecialchars($tache['nom_developpeur']) : 'Aucun'; ?></p>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        
-        <?php endforeach; ?>
+        <h1 class="text-3xl font-bold mb-8 text-gray-800">Affecter des Tâches</h1>
 
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-600">Sprint Backlog</h2>
+            <?php foreach ($fonctionnalites as $fonctionnalite): ?>
+                <?php
+                // Récupérer les taches par fonctionnalités 
+                $stmt = $pdo->prepare("SELECT t.*, u.nom as nom_developpeur FROM taches t LEFT JOIN utilisateurs u ON t.id_developpeur = u.id WHERE t.id_fonctionnalite = ?");
+                $stmt->execute([$fonctionnalite['id']]);
+                $taches = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                ?>
+                <h3 class="text-xl font-semibold p-4 bg-gray-50 border-b rounded-t-xl"><?php echo htmlspecialchars($fonctionnalite['fonctionnalite']); ?> - Tache</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 rounded-xl shadow-md mb-8">
+                        <thead class="bg-gray-50">
+                            <tr class="bg-gray-200">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tâches</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Développeur</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <?php foreach ($taches as $tache): ?>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><?php echo htmlspecialchars($tache['nom_tache']); ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><span class="text-gray-400">Aucune action</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <form action="" method="POST" class="flex justify-between items-center space-x-2">
+                                            <input type="hidden" name="tache_id" value="<?php echo $tache['id']; ?>">
+                                            <select name="utilisateur_id" class="block w-2/4 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" onchange="this.form.submit()">
+                                                <option value="">Sélectionnez un développeur</option>
+                                                <?php foreach ($utilisateurs as $utilisateur): ?>
+                                                    <option value="<?php echo $utilisateur['id']; ?>" <?php echo ($tache['id_developpeur'] == $utilisateur['id']) ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars($utilisateur['nom']); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <p><?php echo $tache['nom_developpeur'] ? htmlspecialchars($tache['nom_developpeur']) : 'Aucun'; ?></p>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
     
 </body>

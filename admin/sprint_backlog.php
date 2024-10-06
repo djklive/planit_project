@@ -20,12 +20,12 @@ $product_backlog = $stmt_product_backlog->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product_backlog_id = $_POST['product_backlog_id'];
     $sprint_id = $_POST['sprint_id'];
-    $statut = $_POST['statut'];
+    //$statut = $_POST['statut'];
     $date_debut = $_POST['date_debut'];
     $date_fin = $_POST['date_fin'];
     
-    $stmt = $pdo->prepare("INSERT INTO sprint_backlog (product_backlog_id, sprint_id, statut, date_debut, date_fin) VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([$product_backlog_id, $sprint_id, $statut, $date_debut, $date_fin]);
+    $stmt = $pdo->prepare("INSERT INTO sprint_backlog (product_backlog_id, sprint_id, date_debut, date_fin) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$product_backlog_id, $sprint_id, $date_debut, $date_fin]);
 
     header('Location: sprint_backlog.php'); // Rediriger après l'ajout
     exit();
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="bg-gray-100">
     <div class="max-w-7xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6">Gestion du Sprint Backlog</h1>
+        <h1 class="text-3xl font-bold mb-6"> Gestion du Sprint Backlog </h1>
 
         <form action="" method="POST" class="mb-6">
             <div class="mb-4">
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full">Ajouter au Sprint Backlog</button>
         </form>
 
-        <h2 class="text-2xl font-bold mb-4">Éléments du Sprint Backlog</h2>
+        <h2 class="text-2xl font-bold mb-4">Éléments du Sprint </h2>
         <table class="min-w-full bg-white border rounded">
             <thead>
                 <tr class="bg-gray-200">
