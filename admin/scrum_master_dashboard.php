@@ -36,7 +36,7 @@ if ($_SESSION['role'] == 'developpeur') {
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
-                    <img src="../images/logo.png" alt="logo" class="w-10 h-10">
+                    <img src="../images/vision pub logo.jpg" alt="logo" class="w-15 h-10">
                     <h1 class="text-white text-lg font-semibold">Scrum Master</h1>
                     <a href="<?php echo $lien; ?>" class="text-white text-lg font-semibold">Accueil</a>
                 </div>
@@ -45,7 +45,7 @@ if ($_SESSION['role'] == 'developpeur') {
                 </div>
             </div>
         </div>
-    </nav>
+    </nav> 
 
     <div class="max-w-7xl mx-auto p-8">
         <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Tableau de bord Scrum Master</h1>
@@ -55,7 +55,7 @@ if ($_SESSION['role'] == 'developpeur') {
             <a href="affecter_taches.php" class="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-green-600 transition duration-200">Affecter des Tâches</a>
         </div>
         
-        <div class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mt-8 hidden" id="btn">
             <h2 class="text-xl font-semibold p-4 bg-gray-50 border-b">Backlog</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">

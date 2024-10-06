@@ -50,7 +50,7 @@ $projets_Admin = $stmt_projets->fetchAll(PDO::FETCH_ASSOC);
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
-                    <img src="../images/logo.png" alt="logo" class="w-10 h-10">
+                    <img src="../images/vision pub logo.jpg" alt="logo" class="w-15 h-10">
                     <h1 class="text-white text-lg font-semibold">Product Owner</h1>
                     <a href="<?php echo $lien; ?>" class="text-white text-lg font-semibold">Accueil</a>
                 </div>

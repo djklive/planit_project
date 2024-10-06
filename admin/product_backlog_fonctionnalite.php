@@ -73,12 +73,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Statut']) && isset($_
 
 if ($_SESSION['role'] == 'developpeur') {
     $lien = "developpeur_dashboard.php";
+    $titre = "Développeur";
  }
  elseif ($_SESSION['role'] == 'scrum_master') {
     $lien = "scrum_master_dashboard.php";
+    $titre = "Scrum Master";
  }
  elseif ($_SESSION['role'] == 'product_owner') {
     $lien = "product_owner_dashboard.php";
+    $titre = "Product Owner";
  }
 ?>
 
@@ -103,8 +106,8 @@ if ($_SESSION['role'] == 'developpeur') {
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
-                    <img src="../images/logo.png" alt="logo" class="w-10 h-10">
-                    <h1 class="text-white text-lg font-semibold">Product Owner</h1>
+                    <img src="../images/vision pub logo.jpg" alt="logo" class="w-15 h-10">
+                    <h1 class="text-white text-lg font-semibold"><?php echo $titre; ?></h1>
                     <a href="<?php echo $lien; ?>" class="text-white text-lg font-semibold">Accueil</a>
                 </div>
                 <div class="space-x-4">
@@ -137,6 +140,8 @@ if ($_SESSION['role'] == 'developpeur') {
                 </form>
             <?php elseif ($_SESSION['role'] == 'developpeur'): ?>
                 <h2 class="text-2xl font-semibold mb-6 text-green-600">Membre Équipe Développement</h2>
+            <?php elseif ($_SESSION['role'] == 'product_owner'): ?>
+                <h2 class="text-2xl font-semibold mb-6 text-blue-600">Product Owner</h2>
             <?php endif; ?>
         </div>
 

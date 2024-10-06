@@ -42,7 +42,7 @@ $fonctionnalites = $stmt_fonctionnalite->fetchAll(PDO::FETCH_ASSOC);
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
-                    <img src="../images/logo.png" alt="logo" class="w-10 h-10">
+                    <img src="../images/vision pub logo.jpg" alt="logo" class="w-15 h-10">
                     <h1 class="text-white text-lg font-semibold">Développeur</h1>
                     <a href="<?php echo $lien; ?>" class="text-white text-lg font-semibold">Accueil</a>
                 </div>
@@ -62,7 +62,7 @@ $fonctionnalites = $stmt_fonctionnalite->fetchAll(PDO::FETCH_ASSOC);
 
             <a href="consulter_planning.php" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Consulter le Planning</a>
             <a href="messaging.php" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Envoyer un Message</a>
-            <a href="statistiques.php" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Marquer l'Avancement</a>
+            <!-- <a href="statistiques.php" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Marquer l'Avancement</a> -->
         </div>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden mt-8">

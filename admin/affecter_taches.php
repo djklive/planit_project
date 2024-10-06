@@ -30,6 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
+if ($_SESSION['role'] == 'developpeur') {
+    $lien = "developpeur_dashboard.php";
+ }
+ elseif ($_SESSION['role'] == 'scrum_master') {
+    $lien = "scrum_master_dashboard.php";
+ }
+ elseif ($_SESSION['role'] == 'product_owner') {
+    $lien = "product_owner_dashboard.php";
+ }
+
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +57,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
+
+    <nav class="bg-gray-800 p-4">
+        
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="../images/vision pub logo.jpg" alt="logo" class="w-15 h-10">
+                    <h1 class="text-white text-lg font-semibold">Scrum Master</h1>
+                    <a href="<?php echo $lien; ?>" class="text-white text-lg font-semibold">Accueil</a>
+                </div>
+                <div class="space-x-4">
+                    <a href="logout.php" class="text-white">Déconnexion</a>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
 
     <div class="max-w-7xl mx-auto p-6 sm:p-8">
 
